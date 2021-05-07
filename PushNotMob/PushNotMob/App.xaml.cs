@@ -1,3 +1,4 @@
+using Com.OneSignal;
 using Prism;
 using Prism.Ioc;
 using PushNotMob.ViewModels;
@@ -18,7 +19,9 @@ namespace PushNotMob
         protected override async void OnInitialized()
         {
             InitializeComponent();
-
+            OneSignal.Current
+                .StartInit("71940d90-308a-4408-a2bc-a94ebf4722ad")
+                .EndInit();
             await NavigationService.NavigateAsync("NavigationPage/MainPage");
         }
 
