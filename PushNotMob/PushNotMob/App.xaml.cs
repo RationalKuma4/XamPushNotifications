@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using Com.OneSignal;
+using Com.OneSignal.Abstractions;
 using Prism;
 using Prism.Ioc;
 using PushNotMob.ViewModels;
@@ -12,16 +14,28 @@ namespace PushNotMob
     public partial class App
     {
         public App(IPlatformInitializer initializer)
-            : base(initializer)
-        {
-        }
+            : base(initializer) { }
 
         protected override async void OnInitialized()
         {
             InitializeComponent();
-            OneSignal.Current
-                .StartInit("71940d90-308a-4408-a2bc-a94ebf4722ad")
+
+            OneSignal.Current.SetLogLevel(LOG_LEVEL.VERBOSE, LOG_LEVEL.NONE);
+            OneSignal.Current.StartInit("xxxxxxxxxxxxx")
+                .Settings(new Dictionary<string, bool>
+                {
+                    { IOSSettings.kOSSettingsKeyAutoPrompt, false },
+                    { IOSSettings.kOSSettingsKeyInAppLaunchURL, false }
+                })
+                .InFocusDisplaying(OSInFocusDisplayOption.Notification)
                 .EndInit();
+
+            OneSignal.Current.RegisterForPushNotifications();
+
+            // Get the playerId assigned to the device
+            // Save it in the storage to work with it later
+            var playerId = await OneSignal.Current.IdsAvailableAsync();
+
             await NavigationService.NavigateAsync("NavigationPage/MainPage");
         }
 

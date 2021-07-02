@@ -2,6 +2,7 @@
 using Android.Content.PM;
 using Android.OS;
 using Com.OneSignal;
+using Com.OneSignal.Abstractions;
 using Prism;
 using Prism.Ioc;
 
@@ -19,8 +20,12 @@ namespace PushNotMob.Droid
             base.OnCreate(savedInstanceState);
 
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
-            OneSignal.Current.StartInit("71940d90-308a-4408-a2bc-a94ebf4722ad")
+
+            OneSignal.Current.SetLogLevel(LOG_LEVEL.VERBOSE, LOG_LEVEL.NONE);
+            OneSignal.Current.StartInit("xxxxxxxxxxxxxxxxxx")
+                .InFocusDisplaying(OSInFocusDisplayOption.Notification)
                 .EndInit();
+
             LoadApplication(new App(new AndroidInitializer()));
         }
 

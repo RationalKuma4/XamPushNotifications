@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace PushNotApi.Vendors.OneSignal
 {
+    // OneSignal notification properties
     public class Notification
     {
         [JsonProperty("app_id")]
@@ -19,5 +20,17 @@ namespace PushNotApi.Vendors.OneSignal
 
         [JsonProperty("include_player_ids")]
         public List<string> PlayersId { get; set; }
+    }
+
+    public class Heading
+    {
+        [JsonProperty("en")]
+        public string En { get; set; }
+    }
+
+    public class Content
+    {
+        [JsonProperty("en")]
+        public string En { get; set; }
     }
 }

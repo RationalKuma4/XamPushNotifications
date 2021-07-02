@@ -1,22 +1,23 @@
-﻿using System;
+﻿using Microsoft.Extensions.Options;
+using PushNotApi.Settings;
+using System;
 using System.Net.Http;
 
 namespace PushNotApi.Vendors.OneSignal
 {
-    public interface IOneSignalClient
-    {
-        HttpClient Client { get; set; }
-    }
-
+    //Class to build the client
     public class OneSignalClient : IOneSignalClient
     {
+        // Settings from appsettings.json
+        private readonly OneSignalSettings _settings;
         public HttpClient Client { get; set; }
 
-        public OneSignalClient(HttpClient httpClient)
+        public OneSignalClient(HttpClient httpClient, IOptions<OneSignalSettings> settings)
         {
-            httpClient.BaseAddress = new Uri("https://onesignal.com/api/v1/");
-            httpClient.DefaultRequestHeaders.Add("Content-Type", "application/json; charset=utf-8");
-            httpClient.DefaultRequestHeaders.Add("Authorization", "Basic MmFmNGZlYmUtNDQxMy00ODY3LWE2N2ItZmYxNGYyMTBlMjEz");
+            _settings = settings.Value;
+            httpClient.BaseAddress = new Uri(_settings.Endpoint);
+            // Add header api key to the header authorization
+            httpClient.DefaultRequestHeaders.Add("Authorization", $"Basic {_settings.RestApiKey}");
             Client = httpClient;
         }
     }
